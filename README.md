@@ -32,7 +32,13 @@
 $ npm install
 ```
 
-## Running the app
+## 1.Installation
+
+```bash
+$ npm run migration:up
+```
+
+## 2.Running the app
 
 ```bash
 # development
@@ -43,6 +49,12 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+```
+
+## 3.Seed
+
+```bash
+$ npm run seed
 ```
 
 ## Test

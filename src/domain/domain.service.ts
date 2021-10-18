@@ -1,16 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Post } from './interfaces/post.interface';
+import { Post } from './interfaces/domain.interface';
 import { CreatePostDTO } from './dto/create-post.dto';
+import { ValidateObjectId, CreateUserDto } from './shared/validate-object-id.pipes';
+const Fuse = require("fuse.js")
 
 @Injectable()
 export class BlogService {
 
     constructor(@InjectModel('Post') private readonly postModel: Model<Post>) { }
 
-    async getPosts(): Promise<Post[]> {
-        const posts = await this.postModel.find().exec();
+    async getPosts(params): Promise<Post[]> {
+        const defaultSkip: number = 0;
+        const defaultLimit: number = 10;
+        const posts = await this.postModel.find()
+            .skip(parseInt(params.skip) || defaultSkip)
+            .limit(parseInt(params.limit) || defaultLimit);
         return posts;
     }
 
@@ -21,11 +27,18 @@ export class BlogService {
         return post;
     }
 
-    async addPost(createPostDTO: CreatePostDTO): Promise<Post> {
-        console.log('createPostDTO: ', createPostDTO)
+    async searchPost(q): Promise<Post[]> {
+        const post = await this.postModel.find().exec();
+
+        const fuse = await new Fuse(post, { keys: ['domainName'] })
+        const result = fuse.search(q)
+
+        return result;
+    }
+
+    async addPost(createPostDTO: CreateUserDto): Promise<Post> {
         const newPost = await new this.postModel(createPostDTO);
-        console.log('newPost: ', newPost)
-        return newPost.save();  
+        return newPost.save();
     }
 
     async editPost(domainId, createPostDTO: CreatePostDTO): Promise<Post> {

@@ -6,9 +6,7 @@ const config = {
     url: "mongodb://localhost:27017",
 
     // TODO Change this to your database name:
-    databaseName: "projectdb",
-    // username: "Admin",
-    // password: "12345678",
+    databaseName: "restAPI",
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting
       useUnifiedTopology: true, // removes a deprecating warning when connecting

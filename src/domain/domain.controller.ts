@@ -1,7 +1,7 @@
-import { Controller, Get, Res, HttpStatus, Param, NotFoundException, Post, Body, Query, Put, Delete } from '@nestjs/common';
-import { BlogService } from './blog.service';
+import { Controller, Get, Res, HttpStatus, Param, NotFoundException, Post, Body, Query, Put, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
+import { BlogService } from './domain.service';
 import { CreatePostDTO } from './dto/create-post.dto';
-import { ValidateObjectId } from './shared/validate-object-id.pipes';
+import { ValidateObjectId, CreateUserDto } from './shared/validate-object-id.pipes';
 
 
 @Controller('domain')
@@ -10,39 +10,31 @@ export class BlogController {
     constructor(private blogService: BlogService) { }
 
     @Get('/')
-    async getPosts(@Res() res) {
-        const posts = await this.blogService.getPosts();
+    async getPosts(@Res() res, @Query() params) {
+        const posts = await this.blogService.getPosts(params);
         return res.status(HttpStatus.OK).json(posts);
     }
 
-    // @Get('/posts')
-    // async getPosts2(@Res() res) {
-    //     const posts = {'status': "OKEY"};
-    //     return res.status(HttpStatus.OK).json(posts);
-    // }
-
-    // @Get('byOwner/:ownerId')
-    // async getPost(@Res() res, @Param('ownerId', new ValidateObjectId()) ownerId) {
-    //     console.log('ownerId: ', ownerId)
-    //     const post = await this.blogService.getPost(ownerId);
-    //     if (!post) throw new NotFoundException('Post does not exist!');
-    //     return res.status(HttpStatus.OK).json(post);
-
-    // }
-
     @Get('byOwner/:ownerId')
     async getPost(@Res() res, @Param('ownerId') ownerId) {
-        console.log('ownerId: ', ownerId)
         const post = await this.blogService.getPost(ownerId);
         if (!post) throw new NotFoundException('Post does not exist!');
         return res.status(HttpStatus.OK).json(post);
-
     }
 
     @Post('/post')
-    async addPost(@Res() res, @Body() createPostDTO: CreatePostDTO) {
-      console.log('createPostDTO1 ', createPostDTO)
+    @UsePipes(new ValidationPipe())
+    async addPost(@Res() res, @Body() createPostDTO: CreateUserDto) {
         const newPost = await this.blogService.addPost(createPostDTO);
+        return res.status(HttpStatus.OK).json({
+            message: "Post has been submitted successfully!",
+            post: newPost
+        })
+    }
+
+    @Post('/search')
+    async searchPost(@Res() res, @Query('q') q) {
+        const newPost = await this.blogService.searchPost(q);
         return res.status(HttpStatus.OK).json({
             message: "Post has been submitted successfully!",
             post: newPost
