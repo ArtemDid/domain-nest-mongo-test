@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post } from './interfaces/domain.interface';
 import { CreatePostDTO } from './dto/create-post.dto';
-import { ValidateObjectId, CreateUserDto } from './shared/validate-object-id.pipes';
+import { CreateUserDto } from './shared/validate-object-id.pipes';
 const Fuse = require("fuse.js")
 
 @Injectable()
