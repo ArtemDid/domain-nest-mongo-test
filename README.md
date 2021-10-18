@@ -32,7 +32,7 @@
 $ npm install
 ```
 
-## 1.Installation
+## 1.Migration
 
 ```bash
 $ npm run migration:up
