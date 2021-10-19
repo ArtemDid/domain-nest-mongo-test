@@ -32,13 +32,17 @@
 $ npm install
 ```
 
-## 1.Migration
+## 1.Environment Variable
+
+.env.example rename to .env and add your own variable values.
+
+## 2.Migration
 
 ```bash
 $ npm run migration:up
 ```
 
-## 2.Running the app
+## 3.Running the app
 
 ```bash
 # development
@@ -51,7 +55,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## 3.Seed
+## 4.Seed
 
 ```bash
 $ npm run seed

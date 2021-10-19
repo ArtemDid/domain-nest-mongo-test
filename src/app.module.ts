@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BlogModule } from './domain/domain.module';
+require('dotenv').config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/restAPI', { useNewUrlParser: true}),
+    MongooseModule.forRoot(process.env.HOST, { useNewUrlParser: true}),
     BlogModule,    
   ],
   controllers: [AppController],

@@ -6,17 +6,18 @@ import { CreatePostDTO } from './dto/create-post.dto';
 import { CreateUserDto } from './shared/validate-object-id.pipes';
 const Fuse = require("fuse.js")
 
+const DEFAULT_SKIP: number = 0;
+const DEFAULT_LIMIT: number = 10;
+
 @Injectable()
 export class BlogService {
 
     constructor(@InjectModel('Post') private readonly postModel: Model<Post>) { }
 
     async getPosts(params): Promise<Post[]> {
-        const defaultSkip: number = 0;
-        const defaultLimit: number = 10;
         const posts = await this.postModel.find()
-            .skip(parseInt(params.skip) || defaultSkip)
-            .limit(parseInt(params.limit) || defaultLimit);
+            .skip(parseInt(params.skip) || DEFAULT_SKIP)
+            .limit(parseInt(params.limit) || DEFAULT_LIMIT);
         return posts;
     }
 
